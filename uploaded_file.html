@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Upload new File</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div class="container">
+  <form id="contact" action={{ url_for_home }} method="get">
+    <h2>Stevens EE-627</h2>
+    <h4>Oops! An Error Occurred</h4>
+    <fieldset>
+        <h3>Team: {{ team_name }}</h3>
+    </fieldset>
+    <fieldset>
+        <h3>Score: {{ correct_rate }}</h3>
+    </fieldset>
+    <fieldset>
+        <h3>Date: {{ date }}</h3>
+    </fieldset>
+    <fieldset>
+      <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Home</button>
+    </fieldset>
+  </form>
+  <form id="contact1" action={{ url_for_cur_ranking }} method="get">
+    <fieldset>
+      <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Current Ranking</button>
+    </fieldset>
+    <fieldset>
+    <h4>If any bug, please contact Meng at <a href="mailto:mcao4@stevens.edu" target="_top">mcao4@stevens.edu</a></h4>
+    </fieldset>
+  </form>
+</div>
+    <p class="copyright">Theme designed by <a href="https://colorlib.com" target="_blank" title="Colorlib">Colorlib</a></p>
+</body>
+</html>

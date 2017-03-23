@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Upload new File</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div class="container" style="max-width: 600px">
+  <form id="contact" action={{ url_for_home }} method="get">
+    <h2>Stevens EE-627</h2>
+    <h3>Current Ranking</h3>
+    <fieldset>
+        <table class="table-fill">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Team</th>
+                <th>Correct Rate</th>
+                <th>Last Update</th>
+            </tr>
+        </thead>
+        <tbody class="table-hover">
+            {% set i = 1 %}
+			{% for item in rank_list %}
+			<tr>
+				<td>{{ i }}</td>
+				<td>{{ team_name_dic[item.team] }}</td>
+				<td>{{ item.score }}</td>
+				<td>{{ item.date }}</td>
+                {% set i=i+1 %}
+			</tr>
+			{% endfor %}
+        </tbody>
+        </table>
+    </fieldset>
+    <fieldset>
+      <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Home</button>
+    </fieldset>
+    <fieldset>
+    <h4>If any bug, please contact Meng at <a href="mailto:mcao4@stevens.edu" target="_top">mcao4@stevens.edu</a></h4>
+    </fieldset>
+  </form>
+</div>
+    <p class="copyright">Theme designed by <a href="https://colorlib.com" target="_blank" title="Colorlib">Colorlib</a></p>
+</body>
+</html>

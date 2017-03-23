@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Upload new File</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div class="container">
+  <form id="contact" action={{ url_for_uploaded_file }} method="post" enctype="multipart/form-data">
+    <h2>Stevens EE-627</h2>
+    <h4>Upload your final project predictions</h4>
+    <fieldset>
+        <h3>Select Team:</h3>
+    </fieldset>
+    <fieldset>
+		<select name="team" required>
+			<option value=""> -- select a team -- </option>
+			{% for line in team_list %}
+			<option value={{ line[1] }}>{{ line[0] }}</option>
+			{% endfor %}
+		</select>
+    </fieldset>
+
+    <fieldset>
+      <input type="file" tabindex="1" required autofocus>
+    </fieldset>
+    <fieldset>
+      <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
+    </fieldset>
+  </form>
+  <form id="contact1" action={{ url_for_cur_ranking }} method="get">
+    <fieldset>
+      <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Current Ranking</button>
+    </fieldset>
+    <fieldset>
+    <h4>If any bug, please contact Meng at <a href="mailto:mcao4@stevens.edu" target="_top">mcao4@stevens.edu</a></h4>
+    </fieldset>
+  </form>
+</div>
+    <p class="copyright">Theme designed by <a href="https://colorlib.com" target="_blank" title="Colorlib">Colorlib</a></p>
+</body>
+</html>
