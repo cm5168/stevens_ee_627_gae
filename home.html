@@ -18,7 +18,7 @@
 		<select name="team" required>
 			<option value=""> -- select a team -- </option>
 			{% for line in team_list %}
-			<option value={{ line[1] }}>{{ line[0] }}</option>
+			<option value={{ line }}>{{ line }}</option>
 			{% endfor %}
 		</select>
     </fieldset>

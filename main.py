@@ -4,9 +4,6 @@
 # Deployment:
 #         Install google gcloud sdk
 #         >> gcloud app deploy app.yaml
-# Test in local:
-#         Install python package in google sdk
-#         >> dev_appserver.py .
 
 ###################################################################################
 ### Libraries and Variables
@@ -30,45 +27,44 @@ def data_key(ds_name = DATASTORE_NAME):
 
 # Dictionary for team
 dic_team={}
-dic_team_member={}
 dic_team_id={}
-teamInfoFile = ["1|ICE-BREAKER|N",
-    "2|LZZ|N",
-    "3|Mc Trump|N",
-    "4|OK|N",
-    "5|Prototype|N",
-    "6|Rocketeers|N",
-    "7|Shaker|N",
-    "8|Spiral of Data Secrets|N",
-    "9|Splinter|N",
-    "10|VANQUISHERS|N",
-    "11|Wolves|N",
-    "12|ZZZ|N"]
+teamInfoFile = ["1|Empty|Empty"]
 
 for line in teamInfoFile:
     line_temp = line.strip("\n").strip("\r").split("|")
     team = re.sub(r'[^a-zA-Z0-9]','_',line_temp[1].lower())
     dic_team[team]=line_temp[1]
-    dic_team_member[team] = line_temp[2]
     dic_team_id[team] = int(line_temp[0])
-list_team=[[dic_team[item],item] for item in dic_team]
 
 # Data File
 TURE_FILE = os.path.join(os.path.dirname(__file__),'/test_log.txt')
 TURE_FILE = 'test_log.txt'
 #TURE_FILE = os.path.join(".",'/test_log.txt')
 
+class TeamList(ndb.Model):
+    team_name = ndb.StringProperty(indexed=True)
+    team_member = ndb.StringProperty(indexed=False)
+    team_id = ndb.IntegerProperty()
+
 class TeamRanking(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
-    team = ndb.StringProperty(indexed=False)
+    team = ndb.StringProperty(indexed=True)
     score = ndb.FloatProperty()
-    teamid = ndb.IntegerProperty()
+    team_id = ndb.IntegerProperty()
 
 class Teamlog(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
     team = ndb.StringProperty(indexed=False)
-    teamid = ndb.IntegerProperty()
+    team_id = ndb.IntegerProperty()
     score = ndb.FloatProperty()
+
+# Create Team database
+temp_team = TeamList(parent = data_key())
+
+temp_team.team_name = 'empty'
+temp_team.team_member = 'empty'
+temp_team.team_id = 1
+temp_team.put()
 
 # Create Match Data
 true_data = []
@@ -82,6 +78,8 @@ with open(TURE_FILE) as trueFile:
 # /home
 class ee_home(webapp2.RequestHandler):
     def get(self):
+        team_list = TeamList.query(ancestor=data_key()).fetch(20)
+        list_team = [team.team_name for team in team_list]
         pass_values = {
             'team_list': list_team,
             #'url_for_uploaded_file':webapp2.uri_for('check'),
@@ -119,13 +117,12 @@ class ee_check(webapp2.RequestHandler):
 
             record.team = team_name
             record.score = float(correct_rate)
-            record.teamid = dic_team_id[team_name]
+            record.teamid = TeamList.query(TeamList.team_name==team_name,ancestor=data_key()).fetch(1)[0].team_id
             record.put()
 
             rank_list_query = TeamRanking.query(ancestor=data_key()).order(-TeamRanking.score)
-            rank_list = rank_list_query.fetch(12)
+            rank_list = rank_list_query.fetch(20)
 
-            upload = 0
             for item in rank_list:
                 if item.team ==team_name:
                     if float(correct_rate) > item.score:
@@ -137,7 +134,7 @@ class ee_check(webapp2.RequestHandler):
                 rank_record = TeamRanking(parent = data_key())
                 rank_record.team = team_name
                 rank_record.score = float(correct_rate)
-                rank_record.teamid = dic_team_id[team_name]
+                rank_record.teamid = TeamList.query(TeamList.team_name==team_name,ancestor=data_key()).fetch(1)[0].team_id
                 rank_record.put()
 
             pass_values = {
@@ -170,12 +167,11 @@ class ee_check(webapp2.RequestHandler):
 class ee_cur_ranking(webapp2.RequestHandler):
     def get(self):
         rank_list_query = TeamRanking.query(ancestor=data_key()).order(-TeamRanking.score)
-        rank_list = rank_list_query.fetch(12)
+        rank_list = rank_list_query.fetch(20)
         pass_values = {
             'rank_list': rank_list,
             #'url_for_home':webapp2.uri_for('home'),
             #'url_for_cur_ranking':webapp2.uri_for('ranking'),
-            'team_name_dic':dic_team,
             'url_for_home':'/',
             'url_for_cur_ranking':'/ranking',
         }

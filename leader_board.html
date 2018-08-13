@@ -26,7 +26,7 @@
 			{% for item in rank_list %}
 			<tr>
 				<td>{{ i }}</td>
-				<td>{{ team_name_dic[item.team] }}</td>
+				<td>{{ item.team }}</td>
 				<td>{{ item.score }}</td>
 				<td>{{ item.date }}</td>
                 {% set i=i+1 %}
