@@ -129,7 +129,7 @@ class ee_check(webapp2.RequestHandler):
                         item.score = float(correct_rate)
                         item.date = datetime.datetime.now()
                         item.put()
-                        break
+                    break
             else:
                 rank_record = TeamRanking(parent = data_key())
                 rank_record.team = team_name
